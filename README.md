@@ -1,59 +1,24 @@
-# TRADING-BOTS
-Here are one of the top EA of all the time
-rsi_trading_bot.py
-import pandas as pd
-import yfinance as yf
+# RSI Trading Bot (Python)
 
-# SETTINGS
-SYMBOL = "EURUSD=X"   # Forex pair
-TIMEFRAME = "1h"
-RSI_PERIOD = 14
+This is a simple trading bot that uses the Relative Strength Index (RSI) to generate buy and sell signals.
 
-# FETCH DATA
-def get_data(symbol, interval):
-    data = yf.download(symbol, period="7d", interval=interval)
-    return data
+## Strategy
+- Buy when RSI < 30 (oversold)
+- Sell when RSI > 70 (overbought)
+- Hold otherwise
 
-# CALCULATE RSI
-def calculate_rsi(data, period=14):
-    delta = data['Close'].diff()
+## Features
+- Fetches real-time forex data using Yahoo Finance
+- Calculates RSI indicator
+- Generates trading signals based on market conditions
 
-    gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
-    loss = (-delta.where(delta < 0, 0)).rolling(window=period).mean()
+## Tech Stack
+- Python
+- Pandas
+- yFinance
 
-    rs = gain / loss
-    rsi = 100 - (100 / (1 + rs))
+## Purpose
+This project demonstrates basic algorithmic trading logic, data analysis, and structured decision-making.
 
-    return rsi
-
-# TRADING LOGIC
-def generate_signal(data):
-    data['RSI'] = calculate_rsi(data)
-
-    latest_rsi = data['RSI'].iloc[-1]
-
-    if latest_rsi < 30:
-        return "BUY"
-    elif latest_rsi > 70:
-        return "SELL"
-    else:
-        return "HOLD"
-
-# MAIN FUNCTION
-def run_bot():
-    print("Fetching market data...")
-    data = get_data(SYMBOL, TIMEFRAME)
-
-    signal = generate_signal(data)
-
-    print(f"Latest Signal for {SYMBOL}: {signal}")
-
-    if signal == "BUY":
-        print("→ Market is oversold. Potential buying opportunity.")
-    elif signal == "SELL":
-        print("→ Market is overbought. Potential selling opportunity.")
-    else:
-        print("→ No clear signal. Stay out of the market.")
-
-if __name__ == "__main__":
-    run_bot()
+## Author
+Joseph Mwaura
